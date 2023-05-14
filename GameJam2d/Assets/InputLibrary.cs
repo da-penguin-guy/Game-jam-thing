@@ -9,16 +9,19 @@ namespace InputTools
     public class OverworldActionMap
     {
         public InputAction movement;
+        public InputAction interact;
         PlayerControls controls;
         public OverworldActionMap()
         {
             controls = new PlayerControls();
             movement = InputData.SetupAction(controls.OverworldInputMaps.Movement);
+            interact = InputData.SetupAction(controls.OverworldInputMaps.Interact);
         }
         public void Disable()
         {
             controls.Disable();
             movement.Disable();
+            interact.Disable();
         }
     }
 

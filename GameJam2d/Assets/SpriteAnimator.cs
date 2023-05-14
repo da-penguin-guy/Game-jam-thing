@@ -7,28 +7,37 @@ using UnityEngine.Playables;
 public class SpriteAnimator : MonoBehaviour
 {
     public Sprite[] idle, moving, shooting, reloading, talking, dying;
+    [HideInInspector]
     public AnimatorState currentState;
+    [HideInInspector]
     public AnimatorState tempState;
-    public SpriteRenderer renderer;
+    SpriteRenderer renderer;
     public int currentSprite;
     public float timer;
     public float frameRate;
     public void Init()
     {
+        renderer = GetComponent<SpriteRenderer>();
         currentSprite = 0;
         renderer.sprite = GetCurrentAnims()[currentSprite];
     }
     public void PlayAnim(AnimatorState state)
     {
         tempState = state;
+        if(tempState != state)
+        {
+            currentSprite = 0;
+        }
     }
-    public void PlayAnimWait(AnimatorState state)
+
+    public void StopAnim()
     {
-        currentState = state; 
+        tempState = currentState;
+        currentSprite = 0;
     }
     public void UpdateSprite()
     {
-        timer += Time.deltaTime;
+        timer += Time.unscaledDeltaTime;
         if (timer > 1/frameRate)
         {
             currentSprite = (currentSprite + 1) % GetCurrentAnims().Length;
@@ -43,6 +52,10 @@ public class SpriteAnimator : MonoBehaviour
     public void OnAnimFinished()
     {
         tempState = currentState;
+    }
+    public bool IsAnimFinished()
+    {
+        return currentSprite == GetCurrentAnims().Length - 1;
     }
     Sprite[] GetCurrentAnims()
     {

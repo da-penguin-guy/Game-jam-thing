@@ -35,6 +35,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""bd815e99-8268-442d-9166-743c2289dde9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -169,6 +178,17 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ec636538-9821-48b9-84ff-b6ef06cad010"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -178,6 +198,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         // OverworldInputMaps
         m_OverworldInputMaps = asset.FindActionMap("OverworldInputMaps", throwIfNotFound: true);
         m_OverworldInputMaps_Movement = m_OverworldInputMaps.FindAction("Movement", throwIfNotFound: true);
+        m_OverworldInputMaps_Interact = m_OverworldInputMaps.FindAction("Interact", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -238,11 +259,13 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputActionMap m_OverworldInputMaps;
     private IOverworldInputMapsActions m_OverworldInputMapsActionsCallbackInterface;
     private readonly InputAction m_OverworldInputMaps_Movement;
+    private readonly InputAction m_OverworldInputMaps_Interact;
     public struct OverworldInputMapsActions
     {
         private @PlayerControls m_Wrapper;
         public OverworldInputMapsActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_OverworldInputMaps_Movement;
+        public InputAction @Interact => m_Wrapper.m_OverworldInputMaps_Interact;
         public InputActionMap Get() { return m_Wrapper.m_OverworldInputMaps; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -255,6 +278,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Movement.started -= m_Wrapper.m_OverworldInputMapsActionsCallbackInterface.OnMovement;
                 @Movement.performed -= m_Wrapper.m_OverworldInputMapsActionsCallbackInterface.OnMovement;
                 @Movement.canceled -= m_Wrapper.m_OverworldInputMapsActionsCallbackInterface.OnMovement;
+                @Interact.started -= m_Wrapper.m_OverworldInputMapsActionsCallbackInterface.OnInteract;
+                @Interact.performed -= m_Wrapper.m_OverworldInputMapsActionsCallbackInterface.OnInteract;
+                @Interact.canceled -= m_Wrapper.m_OverworldInputMapsActionsCallbackInterface.OnInteract;
             }
             m_Wrapper.m_OverworldInputMapsActionsCallbackInterface = instance;
             if (instance != null)
@@ -262,6 +288,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Movement.started += instance.OnMovement;
                 @Movement.performed += instance.OnMovement;
                 @Movement.canceled += instance.OnMovement;
+                @Interact.started += instance.OnInteract;
+                @Interact.performed += instance.OnInteract;
+                @Interact.canceled += instance.OnInteract;
             }
         }
     }
@@ -269,5 +298,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     public interface IOverworldInputMapsActions
     {
         void OnMovement(InputAction.CallbackContext context);
+        void OnInteract(InputAction.CallbackContext context);
     }
 }
